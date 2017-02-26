@@ -1,0 +1,70 @@
+<?php
+    use razmik\helper\Html;
+    use razmik\helper\Url;
+    
+    $currentPath = Url::currentPath();
+    
+    if ($currentPath == '/') {
+        $classArray = 'front';
+    } else {
+        $classArray = explode ('/', $currentPath);
+        $classArray = implode (' ', $classArray);
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title><?= $title ?></title>
+        
+        <link rel="shortcut icon" href="/web/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/web/images/favicon.ico" type="image/x-icon" />
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <?= Html::cssFile("/web/css/reset.css") ?>
+        <?= Html::cssFile("/vendor/twbs/bootstrap/dist/css/bootstrap.min.css") ?>
+        <?= Html::cssFile("/vendor/driftyco/ionicons/css/ionicons.min.css") ?>
+        <?php // Html::cssFile("/vendor/fortawesome/font-awesome/css/font-awesome.min.css") ?>
+        <?= Html::cssFile("/web/css/style.css") ?>
+    </head>
+    <body class="<?= $classArray ?>">
+        <div class="site-wrapper">
+          <div class="site-wrapper-inner">
+            <div class="container">
+    
+              <div class="masthead clearfix">
+                <div class="inner">
+                  <h3 class="masthead-brand"><?= Html::a(Html::ion("chatboxes") . ' ' . $siteName, '/') ?></h3>
+                  <nav class="nav nav-masthead">
+                    <?= Html::a(Html::ion("home"), '/', ['class' => 'nav-link' . ($currentPath == '/' ? ' active' : null)]) ?>
+                    <?= Html::a('Мои сообщения', '/personal/list', ['class' => 'nav-link' . ($currentPath == '/personal/list' ? ' active' : null)]) ?>
+                    <?= Html::a('Управление', '/settings', ['class' => 'nav-link' . ($currentPath == '/settings' ? ' active' : null)]) ?>
+                  </nav>
+                </div>
+              </div>
+    
+              <div class="inner cover">
+                    <h1 class="cover-heading text-center"><?= $title ?></h1>
+                    <?= $content ?>
+              </div>
+    
+             <!-- <div class="mastfoot">
+                <div class="inner">
+                  <p>Cover template for <a href="https://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                </div>
+              </div> -->
+              
+            </div>
+          </div>
+        </div>
+        
+        <?= Html::jsFile("/vendor/components/jquery/jquery.min.js") ?>
+        <?= Html::jsFile("/vendor/twbs/bootstrap/dist/js/bootstrap.min.js") ?>
+        <?= Html::jsFile("/vendor/igorescobar/jquery-mask-plugin/dist/jquery.mask.min.js") ?>
+        
+        <?= Html::jsFile("/web/js/main.js") ?>
+    </body>
+</html>
+

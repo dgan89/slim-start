@@ -1,0 +1,89 @@
+<?php
+    use razmik\helper\Form;
+    use razmik\helper\Html;
+    use razmik\helper\DateTime;
+    use App\SmsMapper;
+?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <?= Html::alert($messages) ?>
+            <h4>
+                <?= Html::ion("social-yen") ?> Текущий баланс: <?= ($balance ? ($balance->value . ' руб.') : 'нет данных') ?><br />
+                <small><?= Html::ion("android-time") ?> дата и время обновления: <?= ($balance ? (DateTime::view($balance->created_at)) : 'нет данных') ?></small>
+            </h4>
+            <br /><br />
+        </div>
+        <div class="col-md-6">
+            <h4><?= Html::ion("ios-gear") ?> Отправить команду</h4><br />
+            
+            <?= Form::beginForm() ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><?= Html::ion("social-android") ?> arduino</h5>
+                        <?= Form::submitButton(Html::ion("loop") . ' ' . 'Перезапустить', ['name' => 'command', 'value' => 'reboot', 'class' => 'btn btn-sm btn-default']) ?>
+                        <p></p>
+                        <?= Form::submitButton(Html::ion("social-yen") . ' ' . 'Обновить баланс', ['name' => 'command', 'value' => 'balance', 'class' => 'btn btn-sm btn-default']) ?>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><?= Html::ion("android-desktop") ?> server</h5>
+                        <?= Form::submitButton(Html::ion("trash-a") . ' ' . 'Очистить логи', ['name' => 'command', 'value' => 'trash', 'class' => 'btn btn-sm btn-default']) ?>
+                    </div>
+                </div>
+                
+                <?= Form::hiddenInput($csrf->keys->name, $csrf->name) ?>
+                <?= Form::hiddenInput($csrf->keys->value, $csrf->value) ?>
+            <?= Form::endForm() ?>
+            
+            <br /><br />
+            <h4><?= Html::ion("gear-a") ?> Команды</h4><br />
+            <div class="list-group">
+            <?php if($commands->notEmpty()): ?>
+                <?php foreach ($commands->itemList() as $item): ?>
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1"><?= Html::ion("gear-a") . ' ' . $item->text ?></h5>
+                          <small><?= DateTime::differenceInDaysText($item->delivered_at) ?></small>
+                        </div>
+                        <small><?= Html::ion($item->statusIcon()) ?> <?= $item->statusName() ?></small>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <blockquote class="blockquote">
+                  <p class="mb-0">
+                    У вас нет смс сообщений
+                  </p>
+                </blockquote>
+            <?php endif; ?>
+            </div>
+            <br />
+            <?= $commands->links() ?>
+            
+        </div>
+        
+        <div class="col-md-6">
+            <h4><?= Html::ion("edit") ?> Логи</h4><br />
+            <div class="list-group">
+            <?php if($pagination->notEmpty()): ?>
+                <?php foreach ($pagination->itemList() as $item): ?>
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1"><?= Html::ion($item->icon()) ?> <?= $item->name() ?></h5>
+                            <small><?= DateTime::view($item->created_at) ?></small>
+                        </div>   
+                        <p class="mb-1"><?= $item->value ?></p>                     
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <blockquote class="blockquote">
+                  <p class="mb-0">
+                    Нет логов
+                  </p>
+                </blockquote>
+            <?php endif; ?>
+            </div>
+            
+            <br />
+            <?= $pagination->links() ?>
+        </div>
+    </div>

@@ -24,10 +24,11 @@ class PhpRenderer extends \Slim\Views\PhpRenderer
   
     public function render(ResponseInterface $response, $template, array $data = [])
     {
+        $this->addAttribute('title', $data['title']);
         $content = $this->fetch($template, $data);
         
         $this->addAttribute('content', $content);
-        $output = $this->fetch('main.phtml', $this->getAttributes());
+        $output = $this->fetch('layouts/main.phtml', $this->getAttributes());
 
         $response->getBody()->write($output);
 

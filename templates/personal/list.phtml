@@ -1,0 +1,50 @@
+<?php
+    use razmik\helper\Form;
+    use razmik\helper\Html;
+    use razmik\helper\DateTime;
+    use App\SmsMapper;
+?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= Html::alert($messages) ?>
+        </div>
+        
+        <div class="col-md-4">
+            <h4><?= Html::ion("android-drafts") ?> Написать СМС</h4><br />
+            <?= Form::beginForm() ?>
+                <?= Form::textInput('Sms[phone]', null, ['label' => Html::ion("ios-telephone") . ' Номер телефона', 'required' => true, 'data-type' => 'phone']) ?>
+                <?= Form::textArea('Sms[text]', null, ['placeholder' => 'Максимальная длинна 120 символов', 'maxlength' => '120', 'label' => Html::ion("android-textsms") . ' Сообщение', 'rows' => 6, 'required' => true]) ?>
+                
+                <?= Form::hiddenInput($csrf->keys->name, $csrf->name) ?>
+                <?= Form::hiddenInput($csrf->keys->value, $csrf->value) ?>
+                
+                <?= Form::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
+            <?= Form::endForm() ?>
+        </div>
+        
+        <div class="col-md-6 offset-md-2">
+            <div class="list-group">
+            <?php if($pagination->notEmpty()): ?>
+                <?php foreach ($pagination->itemList() as $item): ?>
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1"><?= Html::ion("ios-telephone-outline") . ' ' . $item->phone ?></h5>
+                          <small><?= DateTime::differenceInDaysText($item->delivered_at) ?></small>
+                        </div>
+                        <p class="mb-1"><?= $item->text ?></p>
+                        <small><?= Html::ion($item->statusIcon()) ?> <?= $item->statusName() ?></small>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <blockquote class="blockquote">
+                  <p class="mb-0">
+                    У вас нет смс сообщений
+                  </p>
+                </blockquote>
+            <?php endif; ?>
+            </div>
+            
+            <br />
+            <?= $pagination->links() ?>
+        </div>
+    </div>

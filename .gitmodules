@@ -1,0 +1,6 @@
+[submodule "components/helper"]
+	path = components/helper
+	url = https://github.com/dgan89/bootstrap-helper.git
+[submodule "vendor/razmik/helper"]
+	path = vendor/razmik/helper
+	url = https://github.com/dgan89/bootstrap-helper.git
