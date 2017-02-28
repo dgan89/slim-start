@@ -1,4 +1,7 @@
 <?php
+
+$db = require ('db.php');
+
 return [
     'settings' => [
         'displayErrorDetails' => true, // set to false in production
@@ -17,11 +20,6 @@ return [
         ],
         
         // DB settings
-        'db' => [
-            'dns' => 'mysql:host=localhost;dbname=razmik_smska;charset=utf8',
-            'login' => 'razmik_razmik',
-            'password' => 'dgan1989',
-            'dbase' => 'razmik_smska'
-        ],
+        'db' => $db,
     ],
 ];

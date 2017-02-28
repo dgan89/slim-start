@@ -19,17 +19,16 @@ use Gofabian\Negotiation\NegotiationMiddleware;
 
 $container = $app->getContainer();
 
-$container["HttpBasicAuthentication"] = function ($container) {
+$params = require ('params.php');
+
+$container["HttpBasicAuthentication"] = function ($container) use ($params) {
     return new HttpBasicAuthentication([
         "path" => ["/personal", "/admin"],
         //"passthrough" => ["/smska/list"],
         "relaxed" => ["smska.razmik.ru"],
         "realm" => "Protected",
         "secure" => true,
-        "users" => [
-            "admin-ilyha" => "dgan1989",
-            "testik" => "testik",
-        ],
+        "users" => $params['BasicAuthUseres'],
         "error" => function ($request, $response, $arguments) {
             $data = [];
             $data["status"] = "error";
@@ -39,12 +38,12 @@ $container["HttpBasicAuthentication"] = function ($container) {
     ]);
 };
 
-$container["JwtAuthentication"] = function ($container) {
+$container["JwtAuthentication"] = function ($container) use ($params) {
     return new JwtAuthentication([
         "path" => "/api",
         "secure" => true,
         "relaxed" => ["smska.razmik.ru"],
-        "secret" => "apismskakey", //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE0ODUzNzI0MjQsImV4cCI6MTUxNjkwODQyNCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.orry5RaasdoKV3XZauJi708TWtRpYpWwk-w0oVwY6E0
+        "secret" => $params['JwtAuthSecret']
     ]);
 };
 $container["Cors"] = function ($container) {
